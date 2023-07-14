@@ -1,6 +1,13 @@
 .DS_Store
 .thumbs.db
 node_modules
+*.json
+*.config.js
+*.cjs
+.npmrc
+.eslintignore
+.editorconfig
+
 
 # Quasar core related directories
 .quasar
