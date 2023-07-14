@@ -1,17 +1,51 @@
 <template>
   <div>
-    <q-page>
-      <q-container class="q-pa-md">
+    <q-page class="q-pa-lg bg-grey-3 column">
+      <q-container class="q-pa-sm">
         <q-card>
           <q-card-section>
-            <q-form @submit="submitForm">
-              <q-input outlined v-model="formData.name" label="Name" required></q-input>
-              <q-input outlined v-model="formData.email" label="Email" type="email" required></q-input>
-              <q-input outlined v-model="formData.phoneNumber" label="Phone Number" required></q-input>
-              <q-uploader outlined v-model="file" label="ID Photo Upload" accept=".jpg,.png,.jpeg"
-                @input="onFileInput"></q-uploader>
+            <q-form ref="form" @submit="submitForm">
+              <q-input
+                outlined
+                v-model="formData.name"
+                label="Name"
+                required
+                class="q-mb-md"
+              ></q-input>
+              <q-input
+                outlined
+                v-model="formData.email"
+                label="Email"
+                type="email"
+                required
+                class="q-mb-md"
+              ></q-input>
+              <q-input
+                outlined
+                v-model="formData.phoneNumber"
+                label="Phone Number"
+                required
+                class="q-mb-md"
+              ></q-input>
+              <q-uploader
+                url="http://127.0.0.1:3000/submit-form"
+                outlined
+                v-model="file"
+                label="ID Photo Upload"
+                auto-upload
+                required
+                accept=".jpg,.png,.jpeg, image/*"
+                class="q-mb-md"
+                @uploaded="onFileInput"
+              ></q-uploader>
               <div class="q-mt-md">
-                <q-btn type="submit" label="Submit" color="primary" :disable="isSubmitting"></q-btn>
+                <q-btn
+                  type="submit"
+                  label="Submit"
+                  color="primary"
+                  :disable="isSubmitting || !isFormValid"
+                  class="q-w-100"
+                ></q-btn>
               </div>
             </q-form>
           </q-card-section>
@@ -38,11 +72,21 @@ export default defineComponent({
       isSubmitting: false,
     };
   },
+  computed: {
+    isFormValid() {
+      const { name, email, phoneNumber } = this.formData;
+      return name.trim() !== '' && email.trim() !== '' && phoneNumber.trim() !== '' && this.file !== null;
+    },
+  },
   methods: {
     onFileInput(file) {
-      this.file = file;
+      this.file = file[0];
     },
     async submitForm() {
+      if (!this.isFormValid) {
+        return;
+      }
+
       this.isSubmitting = true;
       try {
         const formData = new FormData();
@@ -51,17 +95,20 @@ export default defineComponent({
         formData.append('phoneNumber', this.formData.phoneNumber);
         formData.append('file', this.file);
 
-        await axios.post('/submit-form', formData, {
+        await axios.post('http://127.0.0.1:3000/submit-form', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
+        this.$q.notify('Form Submitted Successfully!');
+
         // Reset form data and file after successful submission
+        this.$refs.form.resetValidation();
         this.formData.name = '';
         this.formData.email = '';
         this.formData.phoneNumber = '';
-        this.file = null;
+        this.file = '';
       } catch (error) {
         console.error('Error submitting form:', error);
         // Handle error message display or other error handling logic
