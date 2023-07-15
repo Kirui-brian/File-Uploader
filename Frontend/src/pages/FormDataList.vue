@@ -1,7 +1,7 @@
 <template>
   <div>
-    <q-page>
-      <q-container class="q-pa-md">
+    <q-page class="q-pa-lg bg-grey-3 column">
+      <q-container class="q-pa-sm">
         <q-card>
           <q-card-section>
             <q-table :rows="formDataList" :columns="columns" row-key="id" :loading="isLoading">
