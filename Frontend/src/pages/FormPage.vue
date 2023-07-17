@@ -11,7 +11,7 @@
                 label="Name"
                 required
                 class="q-mb-md"
-              ></q-input>
+                ></q-input>
               <q-input
                 outlined
                 v-model="formData.email"
@@ -21,23 +21,29 @@
                 class="q-mb-md"
               ></q-input>
               <q-input
+                type="tel"
                 outlined
                 v-model="formData.phoneNumber"
                 label="Phone Number"
                 required
                 class="q-mb-md"
               ></q-input>
-              <q-uploader
-                url="http://127.0.0.1:3000/submit-form"
+              <q-file
+                color="teal"
                 outlined
                 v-model="file"
-                label="ID Photo Upload"
-                auto-upload
+                label="Upload Your ID Photo"
                 required
+                clearable
+                capture
+                autofocus
                 accept=".jpg,.png,.jpeg, image/*"
                 class="q-mb-md"
-                @uploaded="onFileInput"
-              ></q-uploader>
+                >
+                <template v-slot:prepend>
+                  <q-icon name="cloud_upload" />
+                </template>
+              </q-file>
               <div class="q-mt-md">
                 <q-btn
                   type="submit"
@@ -75,14 +81,14 @@ export default defineComponent({
   computed: {
     isFormValid() {
       const { name, email, phoneNumber } = this.formData;
+      console.log('file:', this.file);
       return name.trim() !== '' && email.trim() !== '' && phoneNumber.trim() !== '' && this.file !== null;
     },
   },
   methods: {
-    onFileInput(file) {
-      this.file = file[0];
-    },
-    async submitForm() {
+    async submitForm(event) {
+      event.preventDefault(); // Prevent the default form submission
+
       if (!this.isFormValid) {
         return;
       }
@@ -108,7 +114,8 @@ export default defineComponent({
         this.formData.name = '';
         this.formData.email = '';
         this.formData.phoneNumber = '';
-        this.file = '';
+        this.file = null;
+
       } catch (error) {
         console.error('Error submitting form:', error);
         // Handle error message display or other error handling logic

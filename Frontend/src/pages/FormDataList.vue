@@ -51,7 +51,7 @@ export default defineComponent({
     async fetchFormDataList() {
       this.isLoading = true;
       try {
-        const response = await axios.get('/form-data');
+        const response = await axios.get('http://127.0.0.1:3000/form-data');
         this.formDataList = response.data;
       } catch (error) {
         console.error('Error fetching form data:', error);

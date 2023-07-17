@@ -9,6 +9,7 @@ node_modules
 .npmrc
 .eslintignore
 .editorconfig
+/.hintrc
 
 
 # Quasar core related directories

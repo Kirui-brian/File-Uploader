@@ -1,38 +1,28 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+
+    <q-header elevated class="bg-cyan-8 text-white" height-hint="98">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
 
         <q-toolbar-title>
           File Uploader App
         </q-toolbar-title>
 
       </q-toolbar>
+
+        <q-tabs align="center">
+          <q-route-tab
+            to="/"
+            exact
+            clickable
+            label="Form Page" />
+          <q-route-tab
+            to="form-data-list"
+            exact
+            clickable
+            label="Form Data List" />
+        </q-tabs>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Menu
-        </q-item-label>
-
-       </q-list>
-    </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
