@@ -3,6 +3,8 @@
 node_modules
 *.json
 *.config.js
+*.config.ini
+*.vscode/
 *.cjs
 .npmrc
 .eslintignore
