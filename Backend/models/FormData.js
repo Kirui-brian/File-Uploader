@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const formDataSchema = new mongoose.Schema({
     name: String,
     email: String,
-    phoneNumber: String,
+    phoneNumber: Number,
     filePath: String
 });
 
