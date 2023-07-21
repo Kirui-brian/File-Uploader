@@ -4,7 +4,7 @@
       <q-container class="q-pa-sm">
         <q-card>
           <q-card-section>
-            <q-form ref="form" @submit="submitForm">
+            <q-form ref="form" @submit="submitForm" enctype="multipart/form-data">
               <q-input
                 outlined
                 v-model="formData.name"
