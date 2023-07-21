@@ -10,7 +10,8 @@ node_modules
 .eslintignore
 .editorconfig
 /.hintrc
-
+/.vscode
+/public
 
 # Quasar core related directories
 .quasar
