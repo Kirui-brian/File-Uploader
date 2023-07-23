@@ -81,7 +81,7 @@ export default defineComponent({
   computed: {
     isFormValid() {
       const { name, email, phoneNumber } = this.formData;
-      console.log('file:', this.file);
+      // console.log('file:', this.file);
       return name.trim() !== '' && email.trim() !== '' && phoneNumber.trim() !== '' && this.file !== null;
     },
   },
