@@ -1,10 +1,7 @@
 .DS_Store
 .thumbs.db
 node_modules
-*.config.js
-*.config.ini
 *.vscode/
-*.cjs
 .npmrc
 .eslintignore
 .editorconfig
