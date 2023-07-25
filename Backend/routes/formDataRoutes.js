@@ -1,4 +1,3 @@
-const fastify = require('fastify');
 const multer = require('fastify-multer');
 const formDataController = require('../controllers/formDataController');
 
@@ -24,7 +23,7 @@ function formRoutes(fastify, options, done) {
             }
 
             const filePath = await formDataController.saveFormData(formData, file);
-            reply.send({ success: true, filePath: filePath });
+            reply.send({ success: true, filePath: filePath, message: 'File saved successfully'});
         } catch (error) {
             reply.status(500).send({ error: 'Internal Server Error' });
         }

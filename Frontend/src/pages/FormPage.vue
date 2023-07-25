@@ -101,20 +101,26 @@ export default defineComponent({
         formData.append('phoneNumber', this.formData.phoneNumber);
         formData.append('file', this.file);
 
-        await axios.post('http://127.0.0.1:3000/submit-form', formData, {
+        const response = await axios.post('http://127.0.0.1:3000/submit-form', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log('response: ' , response);
 
-        this.$q.notify('Form Submitted Successfully!');
+        const data = response.data;
+        this.$q.notify(data.message);
+
 
         // Reset form data and file after successful submission
         this.$refs.form.resetValidation();
-        this.formData.name = '';
-        this.formData.email = '';
-        this.formData.phoneNumber = '';
         this.file = null;
+
+        for (let [key, value] of Object.entries (this.formData)) {
+          console.log(key, value);
+
+          this.formData[key] = '';
+        }
 
       } catch (error) {
         console.error('Error submitting form:', error);

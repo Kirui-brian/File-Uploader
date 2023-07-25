@@ -21,7 +21,7 @@ fastify.addHook('onSend', (request, reply, payload, next) => {
 fastify.register(require('@fastify/static'), {
   root: path.join(__dirname, 'uploads'),
   prefix: '/uploads/', // The prefix URL for accessing the images, e.g., /uploads/image.png
-
+  serve: false, 
 });
 
 const start = async () => {
