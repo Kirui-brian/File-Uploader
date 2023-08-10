@@ -2,7 +2,7 @@ const mongoose = require('../db');
 
 const formDataSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, lowercase: true },
     phoneNumber: { type: String, required: true },
     filePath: { type: String, required: true },
 });
