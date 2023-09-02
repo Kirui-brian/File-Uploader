@@ -12,7 +12,7 @@
                 required
                 class="q-mb-md"
                 ></q-input>
-              <q-input
+                <q-input
                 outlined
                 v-model="formData.email"
                 label="Email"
@@ -63,7 +63,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import axios from 'axios';
+import { api } from 'src/boot/axios'
 
 export default defineComponent({
   name: 'FormPage',
@@ -101,7 +101,7 @@ export default defineComponent({
         formData.append('phoneNumber', this.formData.phoneNumber);
         formData.append('file', this.file);
 
-        const response = await axios.post('http://127.0.0.1:3000/submit-form', formData, {
+        const response = await api.post('/submit-form', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

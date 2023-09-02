@@ -10,7 +10,6 @@
               type="email"
               outlined
               class="q-mb-md"
-              :rules="emailRules"
               autocomplete="current-email"
             ></q-input>
             <q-input
@@ -19,7 +18,6 @@
               type="password"
               outlined
               class="q-mb-md"
-              :rules="passwordRules"
               autocomplete="current-password"
             ></q-input>
             <div class="q-mt-md">
@@ -38,34 +36,22 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useAuthStore } from 'src/stores/auth';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'LoginForm',
   setup() {
-    const authStore = useAuthStore();
 
     const formData = {
       email: '',
       password: '',
     };
 
-    const emailRules = [
-      (v) => !!v || 'Email is required',
-      (v) => /.+@.+/.test(v) || 'Email must be valid',
-    ];
-
-    const passwordRules = [(v) => !!v || 'Password is required'];
-
     async function login() {
       // Validate the form data before attempting login
       if (!this.$refs.form.validate()) {
         return;
       }
-
-      // Call the login action from the pinia store
-      const loginSuccess = await authStore.login(formData.email, formData.password);
 
       if (loginSuccess) {
         // Reset form data and redirect
@@ -80,8 +66,6 @@ export default defineComponent({
 
     return {
       formData,
-      emailRules,
-      passwordRules,
       login,
     };
   },

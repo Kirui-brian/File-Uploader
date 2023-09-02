@@ -12,7 +12,7 @@
 
         <q-tabs align="center">
           <q-route-tab
-            to="/"
+            to="/form-page"
             exact
             clickable
             label="Form Page" />
@@ -31,23 +31,25 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
+  setup() {
+    const authStore = useAuthStore();
 
-  },
+    const leftDrawerOpen = ref(false);
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+    const toggleLeftDrawer = () => {
+      leftDrawerOpen.value = !leftDrawerOpen.value;
+    };
 
     return {
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
+      toggleLeftDrawer,
+      isAuthenticated: authStore.isLoggedIn,
+    };
+  },
+});
 </script>

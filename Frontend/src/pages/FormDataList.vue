@@ -37,8 +37,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import axios from 'axios';
-
+import { api } from 'src/boot/axios'
 export default defineComponent({
   name: 'FormDataList',
   data() {
@@ -61,8 +60,9 @@ export default defineComponent({
   methods: {
     async fetchFormDataList() {
       this.isLoading = true;
+      //console.log(api);
       try {
-        const response = await axios.get('http://127.0.0.1:3000/form-data');
+        const response = await api.get('/form-data');
         this.formDataList = response.data;
         // Update the filePath values to the correct URLs served by your Fastify backend
         this.formDataList = response.data.map((item) => ({

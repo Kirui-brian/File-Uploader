@@ -2,9 +2,11 @@ const fastify = require('fastify')({ logger: true });
 const multer = require('fastify-multer');
 const path = require('path');
 const formRoutes = require('./routes/formDataRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 fastify.register(multer.contentParser);
 fastify.register(formRoutes);
+fastify.register(authRoutes);
 
 // Set CORS headers manually
 fastify.addHook('onSend', (request, reply, payload, next) => {

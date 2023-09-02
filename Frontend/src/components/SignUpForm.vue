@@ -4,14 +4,20 @@
       <q-card>
         <q-card-section>
           <q-form ref="form" @submit="signup">
-            <q-input
+             <q-input
+                v-model="formData.name"
+                label="Name"
+                type="text"
+                outlined
+                class="q-mb-md"
+              ></q-input>
+              <q-input
               v-model="formData.email"
               label="Email"
               type="email"
               outlined
               class="q-mb-md"
-              :rules="emailRules"
-              autocomplete="current-email"
+             autocomplete="current email"
             ></q-input>
             <q-input
               v-model="formData.password"
@@ -19,8 +25,7 @@
               type="password"
               outlined
               class="q-mb-md"
-              :rules="passwordRules"
-              autocomplete="current-password"
+              autocomplete="current password"
             ></q-input>
             <div class="q-mt-md">
               <q-btn
@@ -38,53 +43,39 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
+import router from 'src/router';
 
 export default defineComponent({
-  name: 'SignUpComponent',
+  name: 'SignUpForm',
   setup() {
     const authStore = useAuthStore();
 
     const formData = {
+      name: '',
       email: '',
       password: '',
     };
 
-    const emailRules = [
-      (v) => !!v || 'Email is required',
-      (v) => /.+@.+/.test(v) || 'Email must be valid',
-    ];
-
-    const passwordRules = [(v) => !!v || 'Password is required'];
-
-    // Bind the signup function to the current component instance
+      // Bind the signup function to the current component instance
     async function signup() {
       try {
-        if (!this.$refs || !this.$refs.form) {
-          console.error("Form ref is not available.");
-          return;
-        }
-
-        // Validate the form data before attempting signup
-        if (!this.$refs.form.validate()) {
-          return;
-        }
-
         console.log("Form data:", formData); // Debugging
 
-        // Call the signup action from the pinia store
-        const signupSuccess = await authStore.signup(formData.email, formData.password);
+        // Received JWT token from the backend
+        const token = 'Kirui-token';
 
-        if (signupSuccess) {
-          // Reset form data and redirect
-          formData.email = '';
-          formData.password = '';
-          this.$router.push('/form-page');
-        } else {
-          // Handle signup failure
-          this.$q.notify('Signup failed. Please try again.');
-        }
+        // Store the  JWT token in Pinia
+        authStore.setToken(token);
+
+        // Set the JWT token as a cookie
+        this.$cookies.set('Kirui-token', token, '7d');
+
+        // Redirect to the user's logged-in page
+        // Or use Vue router for navigation
+        router.push('/form-page')
+
       } catch (error) {
         console.error("An error occurred during signup:", error);
         // Handle the error gracefully (show a message, log it, etc.)
@@ -93,8 +84,6 @@ export default defineComponent({
 
     return {
       formData,
-      emailRules,
-      passwordRules,
       signup: signup.bind(this), // Bind the signup function to the component instance
     };
   },
