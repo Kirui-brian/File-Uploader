@@ -38,6 +38,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { api } from 'src/boot/axios'
+
 export default defineComponent({
   name: 'FormDataList',
   data() {
