@@ -4,26 +4,29 @@
       <q-card>
         <q-card-section>
           <q-form ref="form" @submit="signup">
-             <q-input
-                v-model="formData.name"
-                label="Name"
-                type="text"
-                outlined
-                class="q-mb-md"
-              ></q-input>
-              <q-input
+            <q-input
+              v-model="formData.name"
+              label="Name"
+              type="text"
+              outlined
+              required
+              class="q-mb-md"
+            ></q-input>
+            <q-input
               v-model="formData.email"
               label="Email"
               type="email"
               outlined
+              required
               class="q-mb-md"
-             autocomplete="current email"
+              autocomplete="current email"
             ></q-input>
             <q-input
               v-model="formData.password"
               label="Password"
               type="password"
               outlined
+              required
               class="q-mb-md"
               autocomplete="current password"
             ></q-input>
@@ -31,8 +34,8 @@
               <q-btn
                 type="submit"
                 label="Sign Up"
-                color="secondary"
-                @click="signup"
+                color="primary"
+                :disable="isSubmitting || !isFormValid"
               ></q-btn>
             </div>
           </q-form>
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import router from 'src/router';
 
@@ -52,39 +55,70 @@ export default defineComponent({
   setup() {
     const authStore = useAuthStore();
 
-    const formData = {
+    // Define formData as a ref to make it reactive
+    const formData = ref({
       name: '',
       email: '',
       password: '',
+    });
+
+    // Define isSubmitting as a ref
+    const isSubmitting = ref(false);
+
+    // Define a function for form validation
+    const isFormValid = () => {
+      const { name, email, password } = formData.value;
+      return name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
     };
 
-      // Bind the signup function to the current component instance
+    // Define the signup function
     async function signup() {
-      try {
-        console.log("Form data:", formData); // Debugging
+      if (!isFormValid()) {
+        return;
+      }
 
-        // Received JWT token from the backend
+      isSubmitting.value = true;
+      try {
+        const response = await api.post('/signup', formData.value, {}); // Use formData as the request body
+
+        const data = response.data;
+        this.$q.notify(data.message);
+
+        // Reset form data and file after successful submission
+        this.$refs.form.resetValidation();
+        this.file = null;
+
+        for (let [key, value] of Object.entries(this.formData)) {
+          console.log(key, value);
+
+          this.formData[key] = '';
+        }
+
+        // Assuming you have defined the api object elsewhere in your code
+        // Replace 'Kirui-token' with the actual token received from the backend
         const token = 'Kirui-token';
 
-        // Store the  JWT token in Pinia
+        // Store the JWT token in Pinia
         authStore.setToken(token);
 
-        // Set the JWT token as a cookie
+        // Set the JWT token as a cookie (ensure you have the $cookies plugin set up)
         this.$cookies.set('Kirui-token', token, '7d');
 
         // Redirect to the user's logged-in page
-        // Or use Vue router for navigation
-        router.push('/form-page')
-
+        router.push('/form-page');
       } catch (error) {
-        console.error("An error occurred during signup:", error);
+        console.error('An error occurred during signup:', error);
         // Handle the error gracefully (show a message, log it, etc.)
+      } finally {
+        isSubmitting.value = false;
       }
     }
 
     return {
       formData,
-      signup: signup.bind(this), // Bind the signup function to the component instance
+      isSubmitting,
+      isFormValid,
+      signup,
     };
   },
 });
