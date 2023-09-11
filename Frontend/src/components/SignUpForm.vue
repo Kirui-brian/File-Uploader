@@ -49,6 +49,7 @@
 import { defineComponent, ref } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import router from 'src/router';
+import { api } from 'src/boot/axios';
 
 export default defineComponent({
   name: 'SignUpForm',
@@ -67,26 +68,29 @@ export default defineComponent({
 
     // Define a function for form validation
     const isFormValid = () => {
-      const { name, email, password } = formData.value;
+      const { name, email, password } = this.formData;
       return name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
     };
 
     // Define the signup function
     async function signup() {
-      if (!isFormValid()) {
+      if (!isFormValid) {
         return;
       }
 
       isSubmitting.value = true;
       try {
-        const response = await api.post('/signup', formData.value, {}); // Use formData as the request body
+        const response = await api.post('/signup', formData, {
+          headers: {
+            'Content-Type': 'multipart/signup',
+          },
+        }); // Use formData as the request body
 
         const data = response.data;
         this.$q.notify(data.message);
 
         // Reset form data and file after successful submission
         this.$refs.form.resetValidation();
-        this.file = null;
 
         for (let [key, value] of Object.entries(this.formData)) {
           console.log(key, value);
