@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const authController = require('../controllers/authController')
 
 // Signup route
 function authRoutes(fastify, options, done) {
@@ -9,7 +10,7 @@ function authRoutes(fastify, options, done) {
             const { name, email, password } = request.body;
 
             // Check if user with same email already exists
-            const existingUser = await User.findOne({ email });
+            const existingUser = await User.authController.findOne({ email });
             if (existingUser) {
                 return reply.code(400).send({ error: 'User already exists' });
             }
@@ -40,7 +41,7 @@ function authRoutes(fastify, options, done) {
             const { email, password } = request.body;
 
             // Check if the user with email exists
-            const user = await User.findOne({ email });
+            const user = await User.authController.findOne({ email });
             if (!user) {
                 return reply.code(401).send({ error: 'Invalid email!' });
             }

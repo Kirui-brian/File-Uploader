@@ -68,13 +68,13 @@ export default defineComponent({
 
     // Define a function for form validation
     const isFormValid = () => {
-      const { name, email, password } = this.formData;
+      const { name, email, password } = formData.value;
       return name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
     };
 
     // Define the signup function
     async function signup() {
-      if (!isFormValid) {
+      if (!isFormValid()) {
         return;
       }
 
@@ -82,7 +82,7 @@ export default defineComponent({
       try {
         const response = await api.post('/signup', formData, {
           headers: {
-            'Content-Type': 'multipart/signup',
+            'Content-Type': 'application/json',
           },
         }); // Use formData as the request body
 

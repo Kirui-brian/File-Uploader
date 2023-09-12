@@ -1,3 +1,4 @@
+const User = require('../models/User')
 
 const signup = async (req, res) => {
     try {
@@ -30,3 +31,5 @@ const signup = async (req, res) => {
         console.log(error.message);
     }
 }
+
+module.exports = signup;
