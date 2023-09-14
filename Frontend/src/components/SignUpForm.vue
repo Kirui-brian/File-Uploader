@@ -81,9 +81,9 @@ export default defineComponent({
       isSubmitting.value = true;
       try {
         const response = await api.post('/signup', formData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          // headers: {
+          //   'Content-Type': 'application/json',
+          // },
         }); // Use formData as the request body
 
         const data = response.data;

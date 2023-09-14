@@ -1,10 +1,10 @@
 const routes = [
   {
-    path: '/',
+    path: '',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: '/',
+        path: 'signup',
         component: () => import('components/SignUpForm.vue'),
         name: 'SignUpForm',
         meta: { requiresAuth: false }, // Set requiresAuth to false as this page is accessible without authentication

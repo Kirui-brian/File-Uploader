@@ -1,23 +1,25 @@
 const fastify = require('fastify')({ logger: true });
 const multer = require('fastify-multer');
 const path = require('path');
+const cors = require('@fastify/cors');
 const formRoutes = require('./routes/formDataRoutes');
 const authRoutes = require('./routes/authRoutes');
 
 fastify.register(multer.contentParser);
+fastify.register(cors, {});
 fastify.register(formRoutes);
 fastify.register(authRoutes);
 
 // Set CORS headers manually
-fastify.addHook('onSend', (request, reply, payload, next) => {
-  console.log(payload.filename)
-  reply.header('Access-Control-Allow-Origin', '*');
-  reply.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
+// fastify.addHook('onSend', (request, reply, payload, next) => {
+//   console.log(payload.filename)
+//   reply.header('Access-Control-Allow-Origin', '*');
+//   reply.header(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept'
+//   );
+//   next();
+// });
 
 // Add the fastify-static plugin to serve the uploaded images
 fastify.register(require('@fastify/static'), {
